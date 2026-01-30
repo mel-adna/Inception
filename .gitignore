@@ -1,0 +1,21 @@
+# Secrets (NEVER PUSH THESE)
+srcs/.env
+.env
+
+# System Files
+.DS_Store
+Thumbs.db
+._*
+
+# Python Junk (For bonus scripts)
+__pycache__
+*.pyc
+*.pyo
+
+# IDE Settings (Optional but good)
+.vscode
+.idea
+*.swp
+
+# Docker/Data junk (Just in case)
+*.log

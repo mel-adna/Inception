@@ -1,0 +1,139 @@
+services:
+  # ============================================================================
+  # Mandatory Services
+  # ============================================================================
+
+  # --- MariaDB (Database) ---
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build:
+      context: requirements/mariadb
+      dockerfile: Dockerfile
+    restart: always
+    env_file: .env
+    networks:
+      - inception
+    volumes:
+      - mariadb_vol:/var/lib/mysql
+
+  # --- WordPress (Website App) ---
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    restart: always
+    env_file: .env
+    networks:
+      - inception
+    volumes:
+      - wordpress_vol:/var/www/html
+    depends_on:
+      - mariadb
+
+  # --- NGINX (Web Server) ---
+  nginx:
+    container_name: nginx
+    image: nginx
+    build:
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "443:443"
+    env_file: .env
+    networks:
+      - inception
+    volumes:
+      - wordpress_vol:/var/www/html
+    depends_on:
+      - wordpress
+
+  # ============================================================================
+  # Bonus Services
+  # ============================================================================
+
+  # --- Redis (Cache) ---
+  redis:
+    container_name: redis
+    image: redis
+    build: requirements/bonus/redis
+    restart: always
+    networks:
+      - inception
+
+  # --- FTP Server (File Transfer) ---
+  ftp:
+    container_name: ftp
+    image: ftp
+    build: requirements/bonus/ftp
+    restart: always
+    ports:
+      - "21:21"
+      - "21100:21100"
+    env_file:
+      - .env
+    networks:
+      - inception
+    volumes:
+      - wordpress_vol:/var/www/html
+
+  # --- Adminer (Database GUI) ---
+  adminer:
+    container_name: adminer
+    image: adminer
+    build: requirements/bonus/adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+
+  # --- Static Website (Resume) ---
+  website:
+    container_name: website
+    image: website
+    build: requirements/bonus/website
+    restart: always
+    ports:
+      - "1337:1337"
+    networks:
+      - inception
+
+  # --- Glances (System Monitor) ---
+  glances:
+    container_name: glances
+    image: glances
+    build: requirements/bonus/glances
+    restart: always
+    ports:
+      - "3000:61208"
+    networks:
+      - inception
+
+# ==============================================================================
+# Network
+# ==============================================================================
+networks:
+  inception:
+    driver: bridge
+
+# ==============================================================================
+# Volumes
+# ==============================================================================
+volumes:
+  mariadb_vol:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${VOL_DB_PATH}
+
+  wordpress_vol:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${VOL_WP_PATH}
