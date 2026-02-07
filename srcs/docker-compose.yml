@@ -16,6 +16,9 @@ services:
       - inception
     volumes:
       - mariadb_vol:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
 
   # --- WordPress (Website App) ---
   wordpress:
@@ -32,6 +35,9 @@ services:
       - wordpress_vol:/var/www/html
     depends_on:
       - mariadb
+    secrets:
+      - db_password
+      - credentials
 
   # --- NGINX (Web Server) ---
   nginx:
@@ -79,6 +85,8 @@ services:
       - inception
     volumes:
       - wordpress_vol:/var/www/html
+    secrets:
+      - ftp_password
 
   # --- Adminer (Database GUI) ---
   adminer:
@@ -112,6 +120,19 @@ services:
       - "3000:61208"
     networks:
       - inception
+
+# ==============================================================================
+# Secrets
+# ==============================================================================
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  credentials:
+    file: ../secrets/credentials.txt
+  ftp_password:
+    file: ../secrets/ftp_password.txt
 
 # ==============================================================================
 # Network

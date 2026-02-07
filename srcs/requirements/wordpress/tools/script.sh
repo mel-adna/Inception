@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Read secrets from Docker secrets files
+if [ -f /run/secrets/db_password ]; then
+    export MYSQL_PASSWORD=$(cat /run/secrets/db_password)
+fi
+
+if [ -f /run/secrets/credentials ]; then
+    export WP_ADMIN_USER=$(grep 'wp_admin_user=' /run/secrets/credentials | cut -d'=' -f2)
+    export WP_ADMIN_PASSWORD=$(grep 'wp_admin_password=' /run/secrets/credentials | cut -d'=' -f2)
+    export WP_ADMIN_EMAIL=$(grep 'wp_admin_email=' /run/secrets/credentials | cut -d'=' -f2)
+fi
+
 # wait for mariadb to be ready
 sleep 10
 

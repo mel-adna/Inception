@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Read FTP password from Docker secrets
+if [ -f /run/secrets/ftp_password ]; then
+    export FTP_PASSWORD=$(cat /run/secrets/ftp_password)
+fi
+
 # 1. Create the FTP user (if not exists)
 if ! id "ftp_user" &>/dev/null; then
     # Create user with home directory pointing to WordPress files

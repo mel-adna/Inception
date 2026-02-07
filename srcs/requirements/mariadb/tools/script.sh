@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Read passwords from Docker secrets
+if [ -f /run/secrets/db_password ]; then
+    export MYSQL_PASSWORD=$(cat /run/secrets/db_password)
+fi
+
+if [ -f /run/secrets/db_root_password ]; then
+    export MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+fi
+
 # 1. Start the service temporarily
 service mariadb start 
 

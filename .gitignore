@@ -1,6 +1,7 @@
 # Secrets (NEVER PUSH THESE)
 srcs/.env
 .env
+secrets/
 
 # System Files
 .DS_Store
