@@ -13,7 +13,7 @@ RUN mkdir -p /var/run/mysqld \
 # Copy config and script
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY tools/script.sh /usr/local/bin/script.sh
-RUN chomd 777 /usr/local/bin/script.sh
+RUN chmod 777 /usr/local/bin/script.sh
 
 # Run the script
 ENTRYPOINT ["/usr/local/bin/script.sh"]

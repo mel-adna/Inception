@@ -1,7 +1,10 @@
 # Secrets (NEVER PUSH THESE)
-#srcs/.env
-#.env
-#secrets/
+srcs/.env
+.env
+secrets/
+
+# Personal notes
+PREPARE.md
 
 # System Files
 .DS_Store

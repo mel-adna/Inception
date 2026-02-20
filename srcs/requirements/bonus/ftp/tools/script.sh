@@ -44,4 +44,4 @@ EOF
 echo "ftp_user" > /etc/vsftpd.userlist
 
 echo "FTP Server started on port 21"
-/usr/sbin/vsftpd /etc/vsftpd.conf
+exec /usr/sbin/vsftpd /etc/vsftpd.conf
